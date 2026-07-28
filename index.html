@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PT Vascomm Digital Asia (VDA) - Produk software dan solusi AI siap pakai</title>
+  <meta name="description"
+    content="VDA adalah anak perusahaan Vascomm yang menjual produk software dan solusi AI siap pakai: DIVA, TalentGo, KelolaHR, dan Sitamoto.">
+  <meta name="theme-color" content="#4368B2">
+
+  <link rel="icon" href="favicon/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
+
+  <link rel="preload" as="image" href="vda-mark.png" fetchpriority="high">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+    rel="stylesheet">
+
+  <!-- Ikon: Phosphor Icons (library, bukan SVG gambar tangan). Dimuat non-blocking.
+     Untuk produksi: self-host subset ikon yang dipakai saja. -->
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" media="print"
+    onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  </noscript>
+
+  <style>
+    /* ============================================================
+   DESIGN TOKENS   (DESIGN-GUIDE.md §4)
+   ============================================================ */
+    :root {
+      /* Inti VDA: sumbu gradient logo.
+     Nilai terukur dari Logo-FINAL.png (sampling piksel), bukan lagi estimasi. */
+      --vda-indigo: #34509A;
+      --vda-blue: #4368B2;
+      --vda-sky: #6098D0;
+
+      /* Jangkar induk */
+      --vascomm-blue: #007EFF;
+      /* hex resmi induk: dipakai untuk bidang, garis, dan tint */
+      --vascomm-ink: #0063CC;
+      /* varian aman-teks: #007EFF hanya 3.6:1 di atas latar terang */
+      --signal: #F7C505;
+
+      /* Netral bersemburat biru */
+      --ink: #101728;
+      --ink-body: #4A5468;
+      --ink-muted: #7A869C;
+      --line: #E2E8F2;
+      --paper: #FFFFFF;
+      --paper-tint: #F4F7FC;
+      --on-grad: #FFFFFF;
+
+      /* Gradient tanda tangan (mark logo + rail produk) */
+      --grad-vda: linear-gradient(135deg, var(--vda-indigo) 0%, var(--vda-blue) 45%, var(--vda-sky) 100%);
+      /* Varian pekat khusus band CTA: ujung terang diturunkan supaya teks putih lolos WCAG AA */
+      --grad-vda-deep: linear-gradient(135deg, #26386F 0%, #34509A 42%, #4368B2 100%);
+
+      /* Tipografi */
+      --font-display: 'Sora', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+      /* Dibatasi 3.75rem supaya headline hero tetap 2 baris di kolom kiri */
+      --t-display: clamp(2.375rem, 5vw, 3.75rem);
+      --t-h2: clamp(1.875rem, 3.4vw, 2.75rem);
+      --t-h3: clamp(1.25rem, 1.8vw, 1.5rem);
+      --t-lead: clamp(1.0625rem, 1.4vw, 1.1875rem);
+      --t-body: 1rem;
+      --t-sm: .875rem;
+      --t-eyebrow: .75rem;
+
+      /* Spasi (basis 8) */
+      --s-1: 8px;
+      --s-2: 16px;
+      --s-3: 24px;
+      --s-4: 32px;
+      --s-5: 48px;
+      --s-6: 64px;
+      --s-7: 96px;
+      --s-8: 128px;
+
+      /* Radius: identitas VDA. Tidak ada 0, tidak ada 4px. */
+      --r-pill: 999px;
+      --r-card: 24px;
+      --r-in: 12px;
+
+      /* Elevasi berwarna */
+      --sh-1: 0 1px 2px rgba(16, 23, 40, .06), 0 2px 8px rgba(67, 104, 178, .05);
+      --sh-2: 0 4px 12px rgba(16, 23, 40, .07), 0 12px 28px rgba(67, 104, 178, .08);
+      --sh-3: 0 8px 24px rgba(16, 23, 40, .09), 0 24px 56px rgba(67, 104, 178, .12);
+
+      /* Motion */
+      --ease: cubic-bezier(.22, 1, .36, 1);
+      --dur-fast: 160ms;
+      --dur-mid: 320ms;
+      --dur-slow: 640ms;
+
+      --header-h: 72px;
+      --container: 1200px;
+    }
+
+    /* Page Theme Lock: satu tema untuk seluruh halaman, mengikuti preferensi sistem.
+   Tambahan di luar DESIGN-GUIDE.md. Hapus blok ini kalau halaman harus
+   light-only agar seragam dengan vascomm.co.id. */
+    @media (prefers-color-scheme:dark) {
+      :root {
+        --ink: #EEF2F9;
+        --ink-body: #A8B4C8;
+        --ink-muted: #7E8CA4;
+        --line: #253046;
+        --paper: #0E1421;
+        --paper-tint: #151D2E;
+        --vascomm-blue: #4DA2FF;
+        --vascomm-ink: #4DA2FF;
+        /* di atas latar gelap, hex terang justru yang aman */
+        --sh-1: 0 1px 2px rgba(0, 0, 0, .4), 0 2px 8px rgba(0, 0, 0, .3);
+        --sh-2: 0 4px 12px rgba(0, 0, 0, .45), 0 12px 28px rgba(0, 0, 0, .35);
+        --sh-3: 0 8px 24px rgba(0, 0, 0, .5), 0 24px 56px rgba(0, 0, 0, .4);
+      }
+    }
+
+    /* ============================================================
+   RESET & DASAR
+   ============================================================ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink-body);
+      font-family: var(--font-body);
+      font-size: var(--t-body);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img,
+    svg {
+      max-width: 100%;
+      display: block
+    }
+
+    a {
+      color: var(--vda-blue);
+      text-decoration: none
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-display);
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -.02em;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: var(--t-display);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1.08
+    }
+
+    h2 {
+      font-size: var(--t-h2);
+      font-weight: 600
+    }
+
+    h3 {
+      font-size: var(--t-h3);
+      font-weight: 600;
+      letter-spacing: -.01em;
+      line-height: 1.25
+    }
+
+    p {
+      margin: 0
+    }
+
+    ul,
+    ol {
+      list-style: none;
+      padding: 0;
+      margin: 0
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--vda-blue);
+      outline-offset: 2px;
+      border-radius: var(--r-in);
+    }
+
+    /* Header sticky tidak boleh menabrak konten (§10 guide) */
+    [id] {
+      scroll-margin-top: calc(var(--header-h) + var(--s-3))
+    }
+
+    .skip {
+      position: absolute;
+      left: var(--s-2);
+      top: -100px;
+      z-index: 100;
+      background: var(--vda-blue);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: var(--r-pill);
+      font-weight: 600;
+      font-size: var(--t-sm);
+      transition: top var(--dur-fast) var(--ease);
+    }
+
+    .skip:focus {
+      top: var(--s-2)
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .wrap {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 var(--s-3)
+    }
+
+    .section {
+      padding: var(--s-7) 0
+    }
+
+    .section--tint {
+      background: var(--paper-tint)
+    }
+
+    .lede {
+      font-size: var(--t-lead);
+      line-height: 1.6;
+      max-width: 56ch
+    }
+
+    .body-w {
+      max-width: 62ch
+    }
+
+    /* ============================================================
+   KOMPONEN DASAR
+   ============================================================ */
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--t-eyebrow);
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--vda-blue);
+      margin: 0 0 var(--s-2);
+    }
+
+    .chip-lineage {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px 7px 10px;
+      border-radius: var(--r-pill);
+      background: rgba(0, 126, 255, .09);
+      border: 1px solid rgba(0, 126, 255, .26);
+      color: var(--vascomm-ink);
+      font-size: var(--t-sm);
+      font-weight: 500;
+      transition: background var(--dur-fast) var(--ease);
+    }
+
+    .chip-lineage:hover {
+      background: rgba(0, 126, 255, .17)
+    }
+
+    .chip-lineage svg {
+      width: 18px;
+      height: 18px;
+      flex: none
+    }
+
+    @media (prefers-color-scheme:dark) {
+      .chip-lineage {
+        background: rgba(77, 162, 255, .12);
+        border-color: rgba(77, 162, 255, .3)
+      }
+
+      .chip-lineage:hover {
+        background: rgba(77, 162, 255, .2)
+      }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 48px;
+      padding: 13px 26px;
+      border-radius: var(--r-pill);
+      font-family: var(--font-body);
+      font-size: var(--t-body);
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: transform var(--dur-fast) var(--ease),
+        background-color var(--dur-fast) var(--ease),
+        border-color var(--dur-fast) var(--ease),
+        color var(--dur-fast) var(--ease),
+        box-shadow var(--dur-fast) var(--ease);
+    }
+
+    .btn i {
+      font-size: 19px;
+      line-height: 1
+    }
+
+    .btn:hover {
+      transform: translateY(-2px)
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(.985)
+    }
+
+    .btn--primary {
+      background: var(--vda-blue);
+      color: #fff;
+      box-shadow: var(--sh-1)
+    }
+
+    .btn--primary:hover {
+      background: var(--vda-indigo);
+      color: #fff;
+      box-shadow: var(--sh-2)
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--line)
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--vda-blue);
+      color: var(--vda-blue)
+    }
+
+    .btn--signal {
+      background: var(--signal);
+      color: #101728;
+      box-shadow: var(--sh-2)
+    }
+
+    .btn--signal:hover {
+      background: #FFD524;
+      color: #101728
+    }
+
+    .btn--onGrad {
+      background: transparent;
+      color: #fff;
+      border-color: rgba(255, 255, 255, .62)
+    }
+
+    .btn--onGrad:hover {
+      background: rgba(255, 255, 255, .15);
+      border-color: #fff;
+      color: #fff
+    }
+
+    .btn--sm {
+      min-height: 44px;
+      padding: 11px 22px;
+      font-size: var(--t-sm)
+    }
+
+    /* ============================================================
+   HEADER
+   ============================================================ */
+    .hdr {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, .82);
+      border-bottom: 1px solid transparent;
+      transition: background var(--dur-mid) var(--ease),
+        border-color var(--dur-mid) var(--ease),
+        box-shadow var(--dur-mid) var(--ease);
+    }
+
+    @supports (backdrop-filter:blur(1px)) {
+      .hdr {
+        backdrop-filter: blur(14px) saturate(160%);
+        -webkit-backdrop-filter: blur(14px) saturate(160%)
+      }
+    }
+
+    .hdr.is-stuck {
+      background: rgba(255, 255, 255, .95);
+      border-bottom-color: var(--line);
+      box-shadow: var(--sh-1)
+    }
+
+    @media (prefers-color-scheme:dark) {
+      .hdr {
+        background: rgba(14, 20, 33, .82)
+      }
+
+      .hdr.is-stuck {
+        background: rgba(14, 20, 33, .95)
+      }
+    }
+
+    @media (prefers-reduced-transparency:reduce) {
+      .hdr {
+        background: var(--paper);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none
+      }
+
+      .hdr.is-stuck {
+        background: var(--paper)
+      }
+    }
+
+    .hdr .wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4);
+      width: 100%
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-right: auto
+    }
+
+    .brand img {
+      width: 38px;
+      height: auto;
+      flex: none
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      color: var(--ink);
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .brand-name span {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: .625rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4)
+    }
+
+    .nav a {
+      color: var(--ink-body);
+      font-size: .9375rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: color var(--dur-fast) var(--ease)
+    }
+
+    .nav a:hover {
+      color: var(--vda-blue)
+    }
+
+    .nav .btn:hover {
+      color: #fff
+    }
+
+    .nav-cta {
+      margin-left: var(--s-1);
+      color: #fff !important;
+    }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: 1.5px solid var(--line);
+      border-radius: var(--r-pill);
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .menu-btn i {
+      font-size: 22px
+    }
+
+    @media (max-width:900px) {
+      .nav {
+        position: fixed;
+        inset: var(--header-h) 0 auto 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background: var(--paper);
+        border-bottom: 1px solid var(--line);
+        padding: var(--s-2) var(--s-3) var(--s-4);
+        box-shadow: var(--sh-2);
+        display: none;
+      }
+
+      .nav.is-open {
+        display: flex
+      }
+
+      .nav a {
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 1.0625rem
+      }
+
+      .nav-cta {
+        margin: var(--s-3) 0 0;
+        width: 100%
+      }
+
+      .nav .btn {
+        border-bottom: none
+      }
+
+      .menu-btn {
+        display: inline-flex
+      }
+    }
+
+    /* ============================================================
+   HERO
+   ============================================================ */
+    .hero {
+      position: relative;
+      padding: var(--s-6) 0 var(--s-7);
+      overflow: hidden
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 55%;
+      background: linear-gradient(180deg, transparent, rgba(96, 152, 208, .13));
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: var(--s-6);
+      align-items: center
+    }
+
+    .hero h1 {
+      margin: var(--s-3) 0
+    }
+
+    .hero .lede {
+      max-width: 46ch
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s-2);
+      margin-top: var(--s-5)
+    }
+
+    mark {
+      background: var(--signal);
+      color: #101728;
+      border-radius: var(--r-pill);
+      padding: .02em .32em .1em;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    .hero-mark {
+      width: 100%;
+      max-width: 380px;
+      margin-left: auto;
+      height: auto
+    }
+
+    @media (max-width:900px) {
+      .hero .wrap {
+        grid-template-columns: 1fr;
+        gap: var(--s-5);
+        text-align: center
+      }
+
+      .hero-actions {
+        justify-content: center
+      }
+
+      .hero .lede {
+        margin-inline: auto
+      }
+
+      .hero-mark {
+        margin-inline: auto;
+        max-width: 250px;
+        order: -1
+      }
+    }
+
+    /* ============================================================
+   TENTANG
+   ============================================================ */
+    .about h2 {
+      margin-bottom: var(--s-3)
+    }
+
+    .about .lede {
+      margin-bottom: var(--s-6)
+    }
+
+    .dl-row {
+      display: grid;
+      grid-template-columns: minmax(170px, .3fr) 1fr;
+      gap: var(--s-4);
+      padding: var(--s-4) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .dl-row:last-child {
+      border-bottom: 1px solid var(--line)
+    }
+
+    .dl-row dt {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.125rem;
+      color: var(--ink);
+      letter-spacing: -.01em;
+      line-height: 1.3
+    }
+
+    .dl-row dd {
+      margin: 0;
+      max-width: 52ch
+    }
+
+    @media (max-width:720px) {
+      .dl-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: var(--s-3) 0
+      }
+    }
+
+    /* ============================================================
+   PRODUK: rail bertanda tangan
+   ============================================================ */
+    .products-head {
+      max-width: 62ch;
+      margin-bottom: var(--s-6)
+    }
+
+    .products-head .lede {
+      margin-top: var(--s-3)
+    }
+
+    .rail {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr)
+    }
+
+    .rail-card {
+      grid-column: 1 / 8
+    }
+
+    .rail-card--right {
+      grid-column: 6 / 13
+    }
+
+    .connector,
+    .tail {
+      grid-column: 1 / -1;
+      position: relative
+    }
+
+    .connector svg,
+    .tail svg {
+      width: 100%;
+      height: auto;
+      display: block
+    }
+
+    @media (max-width:860px) {
+
+      .rail-card,
+      .rail-card--right {
+        grid-column: 1 / -1
+      }
+
+      .connector svg {
+        display: none
+      }
+
+      .connector {
+        height: 56px
+      }
+
+      .connector::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        transform: translateX(-50%);
+        border-radius: var(--r-pill);
+        background: var(--grad-vda);
+      }
+
+      .tail {
+        display: none
+      }
+    }
+
+    /* Kartu produk: netral seragam, warna brand hanya sebagai aksen tipis (§7 guide) */
+    .card {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--r-card);
+      padding: var(--s-4);
+      box-shadow: var(--sh-1);
+      overflow: hidden;
+      transition: transform var(--dur-mid) var(--ease),
+        box-shadow var(--dur-mid) var(--ease),
+        border-color var(--dur-mid) var(--ease);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: var(--s-4);
+      width: 40%;
+      height: 3px;
+      border-radius: var(--r-pill);
+      background: var(--bc);
+      transition: width var(--dur-mid) var(--ease);
+    }
+
+    .card:hover,
+    .card:focus-within {
+      transform: translateY(-4px);
+      box-shadow: var(--sh-2);
+      border-color: var(--bct);
+    }
+
+    .card:hover::before,
+    .card:focus-within::before {
+      width: calc(100% - var(--s-4)*2)
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: var(--s-3)
+    }
+
+    .mono-badge {
+      width: 46px;
+      height: 46px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border-radius: var(--r-pill);
+      background: var(--bc-tint);
+      color: var(--bct);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      letter-spacing: -.02em;
+    }
+
+    .card-top h3 {
+      margin-right: auto
+    }
+
+    .card-kind {
+      font-family: var(--font-mono);
+      font-size: .6875rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--bct);
+      background: var(--bc-tint);
+      padding: 6px 12px;
+      border-radius: var(--r-pill);
+      white-space: nowrap;
+    }
+
+    .card p {
+      max-width: 48ch
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s-1);
+      margin: var(--s-3) 0 var(--s-4)
+    }
+
+    .chips li {
+      font-size: var(--t-sm);
+      color: var(--ink-body);
+      border: 1px solid var(--line);
+      border-radius: var(--r-pill);
+      padding: 5px 14px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      font-family: var(--font-mono);
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--ink);
+      transition: color var(--dur-fast) var(--ease);
+    }
+
+    .card-link i {
+      font-size: 16px;
+      color: var(--bct);
+      transition: transform var(--dur-fast) var(--ease)
+    }
+
+    .card-link:hover {
+      color: var(--bct)
+    }
+
+    .card-link:hover i {
+      transform: translate(3px, -3px)
+    }
+
+    @media (max-width:560px) {
+      .card {
+        padding: var(--s-3)
+      }
+
+      .card::before {
+        left: var(--s-3)
+      }
+
+      .card:hover::before,
+      .card:focus-within::before {
+        width: calc(100% - var(--s-3)*2)
+      }
+
+      .card-top {
+        flex-wrap: wrap
+      }
+
+      .card-kind {
+        order: 3
+      }
+    }
+
+    /* ============================================================
+   KENAPA VDA: bento asimetris, 4 sel untuk 4 poin
+   ============================================================ */
+    .why h2 {
+      max-width: 20ch;
+      margin-bottom: var(--s-6)
+    }
+
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--s-3)
+    }
+
+    .tile {
+      border-radius: var(--r-card);
+      padding: var(--s-4);
+      border: 1px solid var(--line);
+      background: var(--paper)
+    }
+
+    .tile h3 {
+      margin-bottom: 10px
+    }
+
+    .tile p {
+      max-width: 46ch
+    }
+
+    .tile--a {
+      grid-column: span 7;
+      background: var(--paper-tint);
+      border-color: transparent
+    }
+
+    .tile--b {
+      grid-column: span 5
+    }
+
+    .tile--c {
+      grid-column: span 5
+    }
+
+    .tile--d {
+      grid-column: span 7;
+      border-color: transparent;
+      background:
+        radial-gradient(120% 150% at 100% 0%, rgba(96, 152, 208, .22), rgba(96, 152, 208, 0) 62%),
+        var(--paper-tint);
+    }
+
+    @media (max-width:860px) {
+
+      .tile--a,
+      .tile--b,
+      .tile--c,
+      .tile--d {
+        grid-column: span 12
+      }
+    }
+
+    /* ============================================================
+   CARA MULAI: alur berurutan dengan garis penghubung
+   ============================================================ */
+    .steps-head {
+      margin-bottom: var(--s-6)
+    }
+
+    .flow {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-5)
+    }
+
+    .flow::before {
+      content: "";
+      position: absolute;
+      left: 9%;
+      right: 9%;
+      top: 19px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--vda-indigo), var(--vda-sky));
+      border-radius: var(--r-pill);
+      opacity: .3;
+    }
+
+    .step {
+      position: relative
+    }
+
+    .step-n {
+      position: relative;
+      z-index: 1;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--r-pill);
+      background: var(--paper);
+      border: 2px solid var(--vda-blue);
+      color: var(--vda-blue);
+      font-family: var(--font-mono);
+      font-size: var(--t-sm);
+      font-weight: 500;
+      margin-bottom: var(--s-3);
+    }
+
+    .step h3 {
+      margin-bottom: 8px
+    }
+
+    .step p {
+      max-width: 34ch
+    }
+
+    @media (max-width:860px) {
+      .flow {
+        grid-template-columns: 1fr;
+        gap: var(--s-4)
+      }
+
+      .flow::before {
+        left: 18px;
+        right: auto;
+        top: 10%;
+        bottom: 10%;
+        width: 2px;
+        height: auto;
+        background: linear-gradient(180deg, var(--vda-indigo), var(--vda-sky));
+      }
+
+      .step {
+        padding-left: 58px
+      }
+
+      .step-n {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0
+      }
+    }
+
+    /* ============================================================
+   BAND CTA: gradient + tombol kuning (mewarisi induk, §2.2b)
+   ============================================================ */
+    .cta {
+      background: var(--grad-vda-deep);
+      border-radius: var(--r-card);
+      padding: var(--s-7) var(--s-5);
+      text-align: center;
+      color: var(--on-grad);
+    }
+
+    .cta h2 {
+      color: var(--on-grad);
+      max-width: 18ch;
+      margin: 0 auto var(--s-3)
+    }
+
+    .cta p {
+      color: rgba(255, 255, 255, .9);
+      max-width: 52ch;
+      margin: 0 auto;
+      font-size: var(--t-lead);
+      line-height: 1.6
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s-2);
+      justify-content: center;
+      margin-top: var(--s-5)
+    }
+
+    @media (max-width:560px) {
+      .cta {
+        padding: var(--s-6) var(--s-3)
+      }
+    }
+
+    /* ============================================================
+   FOOTER
+   ============================================================ */
+    .love {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      padding: var(--s-3) 0;
+      border-top: 1px solid var(--line);
+      font-size: var(--t-sm);
+      font-weight: 600;
+      color: var(--vascomm-ink);
+    }
+
+    .love i {
+      font-size: 16px;
+      color: #E5484D
+    }
+
+    .ftr {
+      background: var(--paper-tint);
+      padding: var(--s-6) 0 var(--s-4)
+    }
+
+    .ftr-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1.35fr;
+      gap: var(--s-5);
+      padding-bottom: var(--s-5);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ftr h2 {
+      font-size: var(--t-sm);
+      font-family: var(--font-body);
+      font-weight: 600;
+      color: var(--vascomm-ink);
+      margin-bottom: var(--s-3);
+      letter-spacing: 0;
+    }
+
+    .ftr-brand img {
+      width: 52px;
+      height: auto;
+      margin-bottom: var(--s-3)
+    }
+
+    .ftr-brand p {
+      font-size: var(--t-sm);
+      max-width: 34ch;
+      color: var(--ink-muted)
+    }
+
+    .ftr ul {
+      display: grid;
+      gap: 12px
+    }
+
+    .ftr ul a {
+      color: var(--ink-body);
+      font-size: var(--t-sm)
+    }
+
+    .ftr ul a:hover {
+      color: var(--vda-blue)
+    }
+
+    .ftr-contact li {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      font-size: var(--t-sm);
+      color: var(--ink-body)
+    }
+
+    .ftr-contact i {
+      font-size: 17px;
+      color: var(--vda-blue);
+      flex: none;
+      margin-top: 3px
+    }
+
+    .ftr-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s-3);
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--s-4)
+    }
+
+    .ftr-bottom p {
+      font-size: .8125rem;
+      color: var(--ink-muted);
+      max-width: 56ch
+    }
+
+    .social {
+      display: flex;
+      gap: var(--s-1)
+    }
+
+    .social a {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--r-pill);
+      border: 1px solid var(--line);
+      color: var(--ink-muted);
+      transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+    }
+
+    .social a:hover {
+      color: var(--vda-blue);
+      border-color: var(--vda-blue)
+    }
+
+    .social i {
+      font-size: 19px
+    }
+
+    @media (max-width:860px) {
+      .ftr-grid {
+        grid-template-columns: 1fr;
+        gap: var(--s-4)
+      }
+    }
+
+    /* ============================================================
+   MOTION
+   Satu momen terkoreografi di hero, lalu reveal terarah dan rail
+   yang menggambar diri. Tidak ada animasi lain.
+   ============================================================ */
+    /* Mark tidak lagi menggambar dirinya sendiri: sumbernya raster, bukan vektor.
+   Diganti kedatangan berskala. Hanya transform dan opacity, aman GPU. */
+    .hero-mark {
+      opacity: 0;
+      transform: scale(.93);
+      animation: markIn 760ms var(--ease) forwards
+    }
+
+    @keyframes markIn {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .rise {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: rise var(--dur-mid) var(--ease) forwards
+    }
+
+    .rise--1 {
+      animation-delay: 180ms
+    }
+
+    .rise--2 {
+      animation-delay: 300ms
+    }
+
+    .rise--3 {
+      animation-delay: 420ms
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 560ms var(--ease), transform 560ms var(--ease)
+    }
+
+    .reveal.is-in {
+      opacity: 1;
+      transform: none
+    }
+
+    .rail-path {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 900ms var(--ease)
+    }
+
+    .is-in .rail-path {
+      stroke-dashoffset: 0
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html {
+        scroll-behavior: auto
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+
+      .rail-path {
+        stroke-dashoffset: 0 !important
+      }
+
+      .rise,
+      .reveal,
+      .hero-mark {
+        opacity: 1 !important;
+        transform: none !important
+      }
+
+      .btn:hover,
+      .card:hover {
+        transform: none
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="skip" href="#main">Lompat ke konten utama</a>
+
+  <!-- Definisi dipakai bersama oleh semua SVG di halaman -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="gradVda" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#34509A" />
+        <stop offset=".45" stop-color="#4368B2" />
+        <stop offset="1" stop-color="#6098D0" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Sentinel state header: menghindari listener scroll -->
+  <div id="top" aria-hidden="true" style="position:absolute;top:0;width:1px;height:1px"></div>
+
+  <header class="hdr" id="hdr">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="PT Vascomm Digital Asia, kembali ke atas">
+        <img src="vda-mark.png" width="768" height="559" decoding="async" alt="" aria-hidden="true">
+        <span class="brand-name">Vascomm Digital Asia<span>VDA</span></span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Navigasi utama">
+        <a href="#tentang">Tentang</a>
+        <a href="#produk">Produk</a>
+        <a href="#kenapa">Kenapa VDA</a>
+        <a class="btn btn--primary btn--sm nav-cta" href="#kontak">Hubungi kami</a>
+      </nav>
+
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="nav"
+        aria-label="Buka menu">
+        <i class="ph ph-list" id="menuIcon" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <a class="chip-lineage rise rise--1" href="https://vascomm.co.id" target="_blank" rel="noopener noreferrer">
+            <!-- Mark induk: dua belah ketupat bersudut tajam -->
+            <svg viewBox="0 0 133 90" aria-hidden="true" focusable="false">
+              <g fill="none" stroke="currentColor" stroke-width="13" stroke-linejoin="round">
+                <path d="M12 45 45 12 78 45 45 78Z" />
+                <path d="M55 45 88 12 121 45 88 78Z" />
+              </g>
+            </svg>
+            Bagian dari PT Vascomm Solusi Teknologi
+          </a>
+
+          <h1 class="rise rise--1">Produk <mark>siap pakai</mark>, dampak <mark>lebih cepat</mark>.</h1>
+
+          <p class="lede rise rise--2">
+            Produk software dan solusi AI yang sudah teruji. HR, branding, otomasi,
+            dan talenta IT, tanpa perlu membangun dari nol.
+          </p>
+
+          <div class="hero-actions rise rise--3">
+            <a class="btn btn--primary" href="#produk">
+              <i class="ph ph-squares-four" aria-hidden="true"></i>Lihat produk kami
+            </a>
+            <a class="btn btn--ghost" href="#kontak">Hubungi kami</a>
+          </div>
+        </div>
+
+        <img class="hero-mark" src="vda-mark.png" width="768" height="559" fetchpriority="high" alt=""
+          aria-hidden="true">
+      </div>
+    </section>
+
+    <!-- ===================== TENTANG ===================== -->
+    <section class="section section--tint about" id="tentang">
+      <div class="wrap">
+        <h2 class="reveal">Produk jadi, bukan proyek dari nol.</h2>
+        <p class="lede body-w reveal">
+          PT Vascomm Digital Asia adalah anak perusahaan PT Vascomm Solusi Teknologi.
+          Kalau Vascomm membangun sistem sesuai pesanan, VDA mengemas apa yang sudah
+          terbukti menjadi produk yang bisa langsung Anda pakai.
+        </p>
+
+        <dl class="reveal">
+          <div class="dl-row">
+            <dt>Siap pakai</dt>
+            <dd>Produk sudah berjalan di pelanggan. Anda mulai dari hari pertama, bukan dari dokumen kebutuhan.</dd>
+          </div>
+          <div class="dl-row">
+            <dt>Ditenagai AI</dt>
+            <dd>Otomasi dan analitik yang dipakai untuk kerja sehari-hari, bukan sekadar label.</dd>
+          </div>
+          <div class="dl-row">
+            <dt>Ditopang Vascomm</dt>
+            <dd>Rekam jejak membangun sistem perbankan dan enterprise sejak 2016.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================== PRODUK (rail) ===================== -->
+    <section class="section" id="produk">
+      <div class="wrap">
+        <div class="products-head reveal">
+          <p class="eyebrow">Empat produk, satu siklus</p>
+          <h2>Dari membangun brand sampai mengotomasi operasional.</h2>
+          <p class="lede">
+            Setiap produk berdiri sendiri. Dipakai bersama, keempatnya menutup satu
+            siklus operasional bisnis Anda.
+          </p>
+        </div>
+
+        <div class="rail">
+
+          <!-- 1. DIVA -->
+          <article class="card rail-card reveal" style="--bc:#EC4899;--bct:#C42071;--bc-tint:rgba(236,72,153,.12)">
+            <div class="card-top">
+              <span class="mono-badge" aria-hidden="true">DV</span>
+              <h3>DIVA</h3>
+              <span class="card-kind">Branding</span>
+            </div>
+            <p>Agensi branding dan digital marketing. Dari website company profile sampai
+              pengelolaan media sosial perusahaan dan produk Anda.</p>
+            <ul class="chips">
+              <li>Website</li>
+              <li>Branding</li>
+              <li>Social media</li>
+            </ul>
+            <a class="card-link" href="https://divacreative.id" target="_blank" rel="noopener noreferrer">
+              divacreative.id<span class="sr-only"> (buka di tab baru)</span>
+              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+            </a>
+          </article>
+
+          <div class="connector reveal" aria-hidden="true">
+            <svg viewBox="0 0 1200 112" preserveAspectRatio="xMidYMid meet">
+              <path class="rail-path" pathLength="1" d="M348 0C348 66 852 46 852 112" fill="none" stroke="url(#gradVda)"
+                stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- 2. TalentGo -->
+          <article class="card rail-card rail-card--right reveal"
+            style="--bc:#2575FC;--bct:#1A5FD6;--bc-tint:rgba(37,117,252,.12)">
+            <div class="card-top">
+              <span class="mono-badge" aria-hidden="true">TG</span>
+              <h3>TalentGo</h3>
+              <span class="card-kind">Talenta IT</span>
+            </div>
+            <p>Penyedia talenta IT dan AI Engineer untuk perusahaan yang butuh menambah
+              kapasitas tim tanpa proses rekrutmen panjang.</p>
+            <ul class="chips">
+              <li>Outsource</li>
+              <li>Sharing talent</li>
+              <li>Talent squad</li>
+            </ul>
+            <a class="card-link" href="https://talentgo.id" target="_blank" rel="noopener noreferrer">
+              talentgo.id<span class="sr-only"> (buka di tab baru)</span>
+              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+            </a>
+          </article>
+
+          <div class="connector reveal" aria-hidden="true">
+            <svg viewBox="0 0 1200 112" preserveAspectRatio="xMidYMid meet">
+              <path class="rail-path" pathLength="1" d="M852 0C852 66 348 46 348 112" fill="none" stroke="url(#gradVda)"
+                stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- 3. KelolaHR -->
+          <article class="card rail-card reveal" style="--bc:#0A7C86;--bct:#045157;--bc-tint:rgba(4,81,87,.11)">
+            <div class="card-top">
+              <span class="mono-badge" aria-hidden="true">KH</span>
+              <h3>KelolaHR</h3>
+              <span class="card-kind">HRIS</span>
+            </div>
+            <p>HRIS dengan absensi geolocation dan face recognition lewat aplikasi Android
+              dan iOS. Payroll, cuti, dan administrasi dalam satu tempat.</p>
+            <ul class="chips">
+              <li>Absensi GPS</li>
+              <li>Face recognition</li>
+              <li>Payroll</li>
+            </ul>
+            <a class="card-link" href="https://kelolahr.id" target="_blank" rel="noopener noreferrer">
+              kelolahr.id<span class="sr-only"> (buka di tab baru)</span>
+              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+            </a>
+          </article>
+
+          <div class="connector reveal" aria-hidden="true">
+            <svg viewBox="0 0 1200 112" preserveAspectRatio="xMidYMid meet">
+              <path class="rail-path" pathLength="1" d="M348 0C348 66 852 46 852 112" fill="none" stroke="url(#gradVda)"
+                stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- 4. Sitamoto -->
+          <article class="card rail-card rail-card--right reveal"
+            style="--bc:#36C6B9;--bct:#14776E;--bc-tint:rgba(54,198,185,.16)">
+            <div class="card-top">
+              <span class="mono-badge" aria-hidden="true">ST</span>
+              <h3>Sitamoto</h3>
+              <span class="card-kind">Produk AI</span>
+            </div>
+            <p>Produk bertenaga AI dan konsultan implementasinya. CRM dan chatbot yang
+              bekerja di kanal yang sudah dipakai pelanggan Anda.</p>
+            <ul class="chips">
+              <li>CRM</li>
+              <li>Chatbot</li>
+              <li>Konsultasi AI</li>
+            </ul>
+            <a class="card-link" href="https://sitamoto.ai" target="_blank" rel="noopener noreferrer">
+              sitamoto.ai<span class="sr-only"> (buka di tab baru)</span>
+              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+            </a>
+          </article>
+
+          <!-- Ekor rail: siklus berbelok kembali ke atas -->
+          <div class="tail reveal" aria-hidden="true">
+            <svg viewBox="0 0 1200 96" preserveAspectRatio="xMidYMid meet">
+              <path class="rail-path" pathLength="1" d="M852 0C852 68 96 62 96 10" fill="none" stroke="url(#gradVda)"
+                stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== KENAPA VDA ===================== -->
+    <section class="section section--tint why" id="kenapa">
+      <div class="wrap">
+        <h2 class="reveal">Kenapa lewat VDA, bukan bangun sendiri.</h2>
+
+        <div class="bento">
+          <div class="tile tile--a reveal">
+            <h3>Produk sudah berjalan</h3>
+            <p>Setiap produk punya pengguna aktif di perusahaan lain. Anda memakai sesuatu
+              yang sudah terbukti, bukan menjadi percobaan pertama.</p>
+          </div>
+          <div class="tile tile--b reveal">
+            <h3>Hitungan hari, bukan bulan</h3>
+            <p>Implementasi dan onboarding berjalan paralel dengan operasional Anda.</p>
+          </div>
+          <div class="tile tile--c reveal">
+            <h3>Satu pintu, empat kebutuhan</h3>
+            <p>Butuh dua produk sekaligus? Satu tim yang mengurus, satu kontrak.</p>
+          </div>
+          <div class="tile tile--d reveal">
+            <h3>Ditopang tim Vascomm</h3>
+            <p>Dukungan teknis dari tim yang terbiasa menangani sistem perbankan dan
+              enterprise, dengan standar keamanan yang sama.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CARA MULAI ===================== -->
+    <section class="section">
+      <div class="wrap">
+        <div class="steps-head reveal">
+          <p class="eyebrow">3 Simple Steps</p>
+          <h2>Tiga langkah untuk mulai.</h2>
+        </div>
+
+        <ol class="flow">
+          <li class="step reveal">
+            <span class="step-n" aria-hidden="true">01</span>
+            <h3>Pilih produknya</h3>
+            <p>Kunjungi situs produk yang paling dekat dengan kebutuhan Anda.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-n" aria-hidden="true">02</span>
+            <h3>Coba dan diskusikan</h3>
+            <p>Tim kami bantu menyesuaikan dengan proses yang sudah berjalan.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-n" aria-hidden="true">03</span>
+            <h3>Jalankan</h3>
+            <p>Implementasi dalam hitungan hari, bukan bulan.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== CTA ===================== -->
+    <section class="section" id="kontak" style="padding-top:0">
+      <div class="wrap">
+        <div class="cta reveal">
+          <h2>Belum yakin mulai dari mana?</h2>
+          <p>Ceritakan kebutuhan Anda. Kami bantu petakan produk mana yang paling masuk
+            akal untuk bisnis Anda.</p>
+          <div class="cta-actions">
+            <a class="btn btn--signal" href="https://wa.me/628113304455" target="_blank" rel="noopener noreferrer">
+              <i class="ph ph-whatsapp-logo" aria-hidden="true"></i>Hubungi kami
+            </a>
+            <a class="btn btn--onGrad" href="https://vascomm.co.id" target="_blank" rel="noopener noreferrer">
+              Kunjungi vascomm.co.id
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="wrap">
+    <p class="love">We Build Our Solutions With <i class="ph ph-heart" aria-hidden="true"></i><span
+        class="sr-only">cinta</span></p>
+  </div>
+
+  <footer class="ftr">
+    <div class="wrap">
+      <div class="ftr-grid">
+        <div class="ftr-brand">
+          <img src="vda-mark.png" width="768" height="559" decoding="async" alt="" aria-hidden="true">
+          <p>PT Vascomm Digital Asia, bagian dari PT Vascomm Solusi Teknologi.</p>
+        </div>
+
+        <div>
+          <h2>Link</h2>
+          <ul>
+            <li><a href="#tentang">Tentang</a></li>
+            <li><a href="#produk">Produk</a></li>
+            <li><a href="#kenapa">Kenapa VDA</a></li>
+            <li><a href="https://vascomm.co.id" target="_blank" rel="noopener noreferrer">vascomm.co.id</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>Kontak</h2>
+          <ul class="ftr-contact">
+            <li><i class="ph ph-whatsapp-logo" aria-hidden="true"></i>
+              <a href="https://wa.me/628113304455" target="_blank" rel="noopener noreferrer">+62 811 3304 455</a>
+            </li>
+            <li><i class="ph ph-phone" aria-hidden="true"></i>
+              <a href="tel:+623185581830">+62 31 8558 1830</a>
+            </li>
+            <li><i class="ph ph-envelope-simple" aria-hidden="true"></i>
+              <a href="mailto:hello@vascomm.co.id">hello@vascomm.co.id</a>
+            </li>
+            <li><i class="ph ph-map-pin" aria-hidden="true"></i>
+              <span>Perkantoran Delta Fortuna No. 46, Sidoarjo, Indonesia 61256</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ftr-bottom">
+        <p>&copy; 2016-2026 PT Vascomm Solusi Teknologi. Seluruh hak cipta dilindungi.</p>
+        <div class="social">
+          <a href="https://www.instagram.com/vascomm" target="_blank" rel="noopener noreferrer"
+            aria-label="Instagram Vascomm"><i class="ph ph-instagram-logo" aria-hidden="true"></i></a>
+          <a href="https://www.linkedin.com/company/vascomm" target="_blank" rel="noopener noreferrer"
+            aria-label="LinkedIn Vascomm"><i class="ph ph-linkedin-logo" aria-hidden="true"></i></a>
+          <a href="https://www.youtube.com/@vascomm" target="_blank" rel="noopener noreferrer"
+            aria-label="YouTube Vascomm"><i class="ph ph-youtube-logo" aria-hidden="true"></i></a>
+          <a href="https://www.facebook.com/vascomm" target="_blank" rel="noopener noreferrer"
+            aria-label="Facebook Vascomm"><i class="ph ph-facebook-logo" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* State header lewat IntersectionObserver pada sentinel, bukan listener scroll. */
+      var hdr = document.getElementById('hdr');
+      var sentinel = document.getElementById('top');
+      if (hdr && sentinel && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          hdr.classList.toggle('is-stuck', !entries[0].isIntersecting);
+        }, { threshold: 0 }).observe(sentinel);
+      }
+
+      /* Menu mobile */
+      var btn = document.getElementById('menuBtn');
+      var icon = document.getElementById('menuIcon');
+      var nav = document.getElementById('nav');
+      if (btn && nav) {
+        var toggle = function (force) {
+          var open = nav.classList.toggle('is-open', force);
+          btn.setAttribute('aria-expanded', String(open));
+          btn.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
+          if (icon) icon.className = open ? 'ph ph-x' : 'ph ph-list';
+        };
+        btn.addEventListener('click', function () { toggle(); });
+        nav.addEventListener('click', function (e) {
+          if (e.target.closest('a') && nav.classList.contains('is-open')) toggle(false);
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && nav.classList.contains('is-open')) { toggle(false); btn.focus(); }
+        });
+      }
+
+      /* Reveal saat masuk viewport.
+         Alasan motion: hierarki, konten muncul mengikuti arah baca.
+         Rail digambar untuk menunjukkan bahwa keempat produk satu rangkaian. */
+      var targets = document.querySelectorAll('.reveal');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduce || !('IntersectionObserver' in window)) {
+        Array.prototype.forEach.call(targets, function (el) { el.classList.add('is-in'); });
+        return;
+      }
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+
+      Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
+    })();
+  </script>
+
+</body>
+
+</html>
