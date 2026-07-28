@@ -16,11 +16,16 @@
   <link rel="manifest" href="favicon/site.webmanifest">
 
   <link rel="preload" as="image" href="vda-mark.png" fetchpriority="high">
+
+  <!-- Font brand: Vascomm Sans, self-hosted. Hanya 4 bobot yang benar-benar
+       dipakai di halaman ini (Regular/Medium/Semibold/Bold), bukan seluruh keluarga. -->
+  <link rel="preload" as="font" type="font/woff2" href="vascomm-sans-v1.1/VascommSans-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="vascomm-sans-v1.1/VascommSans-Semibold.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="vascomm-sans-v1.1/VascommSans-Bold.woff2" crossorigin>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
   <!-- Ikon: Phosphor Icons (library, bukan SVG gambar tangan). Dimuat non-blocking.
      Untuk produksi: self-host subset ikon yang dipakai saja. -->
@@ -31,6 +36,40 @@
   </noscript>
 
   <style>
+    /* ============================================================
+   FONT BRAND: Vascomm Sans (self-hosted, vascomm-sans-v1.1/)
+   Hanya 4 bobot statis yang dipakai di halaman ini. Family tunggal
+   dipakai untuk display maupun body -- satu wajah, bukan pasangan.
+   ============================================================ */
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     /* ============================================================
    DESIGN TOKENS   (DESIGN-GUIDE.md §4)
    ============================================================ */
@@ -62,9 +101,9 @@
       /* Varian pekat khusus band CTA: ujung terang diturunkan supaya teks putih lolos WCAG AA */
       --grad-vda-deep: linear-gradient(135deg, #26386F 0%, #34509A 42%, #4368B2 100%);
 
-      /* Tipografi */
-      --font-display: 'Sora', system-ui, -apple-system, sans-serif;
-      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      /* Tipografi: satu keluarga brand untuk display dan body */
+      --font-display: 'Vascomm Sans', system-ui, -apple-system, sans-serif;
+      --font-body: 'Vascomm Sans', system-ui, -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
       /* Dibatasi 3.75rem supaya headline hero tetap 2 baris di kolom kiri */

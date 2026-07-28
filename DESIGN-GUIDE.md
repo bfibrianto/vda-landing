@@ -199,29 +199,47 @@ Palet diturunkan dari sumbu gradient logo VDA, bukan dari CSS situs induk. Alasa
 
 ### 4.2 Tipografi
 
-Situs induk memakai lima keluarga font tanpa hierarki. VDA memakai tiga, masing-masing dengan tugas yang jelas.
+> ✅ **Diperbarui (28 Juli 2026): font brand resmi ditemukan.** VDA punya font sendiri — **Vascomm Sans** (`vascomm-sans-v1.1/`, 12 file statis WOFF2: Thin–Bold × normal/italic). Ini menggantikan rencana awal di bawah, yang menyusun pasangan Sora + Inter dari font pihak ketiga karena saat itu belum ada font brand. Prinsip "satu display + satu body yang dipasangkan sengaja" **tidak lagi berlaku** — dengan font brand tunggal, display dan body memakai **keluarga yang sama**, dibedakan lewat bobot saja. Ini justru lebih benar secara brand: satu wajah tipografi yang konsisten, bukan pasangan yang dipilih AI.
+>
+> Hanya 4 dari 12 bobot yang dipakai (Regular 400, Medium 500, Semibold 600, Bold 700) — cocok pas dengan seluruh nilai `font-weight` yang sudah ada di kode, tidak ada perubahan struktur CSS lain yang diperlukan. Thin, Light, dan seluruh varian italic di-skip supaya payload font tetap kecil (4 file, ±54KB) karena tidak ada elemen di halaman yang memakainya.
 
 ```css
---font-display: 'Sora', system-ui, sans-serif;        /* 600, 700 */
---font-body:    'Inter', system-ui, sans-serif;       /* 400, 500, 600 */
---font-mono:    'JetBrains Mono', ui-monospace, monospace; /* 500 */
+@font-face { font-family:'Vascomm Sans'; src:url('vascomm-sans-v1.1/VascommSans-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Vascomm Sans'; src:url('vascomm-sans-v1.1/VascommSans-Medium.woff2') format('woff2'); font-weight:500; font-display:swap; }
+@font-face { font-family:'Vascomm Sans'; src:url('vascomm-sans-v1.1/VascommSans-Semibold.woff2') format('woff2'); font-weight:600; font-display:swap; }
+@font-face { font-family:'Vascomm Sans'; src:url('vascomm-sans-v1.1/VascommSans-Bold.woff2') format('woff2'); font-weight:700; font-display:swap; }
+
+--font-display: 'Vascomm Sans', system-ui, sans-serif;   /* 600, 700 */
+--font-body:    'Vascomm Sans', system-ui, sans-serif;   /* 400, 500, 600 */
+--font-mono:    'JetBrains Mono', ui-monospace, monospace; /* 500 — TETAP, lihat alasan di bawah */
 ```
 
-**Kenapa ketiganya, bukan yang lain:**
+**Kenapa mono tetap JetBrains Mono, bukan Vascomm Sans:** brand font ini tidak punya potongan monospace. Prinsip §4.2 awal tetap berlaku untuk peran ini — utility face terpisah untuk eyebrow, label statistik, dan **nama domain produk** (`kelolahr.id`, `sitamoto.ai`). Domain memang alamat, dan menyetelnya dengan mono membuatnya *terbaca sebagai alamat*.
 
-- **Sora (display)** — sans geometris dengan bowl bulat dan potongan terminal yang datar. Konstruksi hurufnya (`o`, `a`, `g`, `d`) adalah lingkaran-dan-stadium — persis primitif bentuk logo VDA. Font ini mengulang logo di setiap heading tanpa perlu menempelkan logo di mana-mana. Ini alasan spesifik untuk brief ini, bukan pilihan default.
-- **Inter (body)** — terbukti terbaca pada ukuran kecil untuk teks bahasa Indonesia yang cenderung panjang. Bonus: TalentGo sudah memakainya, jadi keluarga terasa nyambung.
-- **JetBrains Mono (utility)** — dipakai untuk eyebrow, label statistik, dan **nama domain produk** (`kelolahr.id`, `sitamoto.ai`). Ini bukan dekorasi: domain memang alamat, dan menyetelnya dengan mono membuatnya *terbaca sebagai alamat*. Struktur yang mengkodekan makna.
+⚠️ **Belum di-QA visual:** nilai `letter-spacing` di bawah ini (mis. `-.03em` pada display) dikalibrasi untuk metrik Sora/Clash Display, bukan Vascomm Sans. Font brand kemungkinan punya lebar dan tinggi-x yang berbeda. Cek tracking secara visual setelah font brand tampil dan sesuaikan angkanya kalau terasa terlalu rapat atau terlalu longgar — jangan anggap angka lama otomatis benar untuk font baru.
 
-**Skala tipe (fluid, clamp):**
+<details>
+<summary>Rencana awal sebelum font brand ditemukan (diarsipkan, tidak lagi dipakai)</summary>
+
+Situs induk memakai lima keluarga font tanpa hierarki. VDA awalnya direncanakan memakai tiga font pihak ketiga:
+
+- **Sora (display)** — sans geometris dengan bowl bulat dan potongan terminal yang datar. Konstruksi hurufnya (`o`, `a`, `g`, `d`) adalah lingkaran-dan-stadium — mengulang primitif bentuk logo VDA.
+- **Inter (body)** — terbukti terbaca pada ukuran kecil untuk teks bahasa Indonesia yang cenderung panjang.
+- **JetBrains Mono (utility)** — tetap dipakai, lihat di atas.
+
+Alasan Sora/Inter sudah tidak relevan sekarang karena keduanya bukan font brand — begitu Vascomm Sans tersedia, font brand asli selalu menang atas pasangan pihak ketiga sebaik apa pun alasannya.
+
+</details>
+
+**Skala tipe (fluid, clamp) — nilai tetap sama, hanya nama font di komentar yang diperbarui:**
 
 ```css
---t-display:  clamp(2.75rem, 6.5vw, 4.5rem);   /* H1 hero — Sora 700, ls -0.03em, lh 1.05 */
---t-h2:       clamp(2rem, 4vw, 3rem);          /* judul section — Sora 600, ls -0.02em, lh 1.15 */
---t-h3:       clamp(1.375rem, 2vw, 1.75rem);   /* judul kartu — Sora 600, ls -0.01em, lh 1.25 */
---t-lead:     clamp(1.0625rem, 1.5vw, 1.25rem);/* paragraf hero — Inter 400, lh 1.6 */
---t-body:     1rem;                            /* Inter 400, lh 1.7 */
---t-sm:       0.875rem;                        /* Inter 400, lh 1.6 */
+--t-display:  clamp(2.75rem, 6.5vw, 4.5rem);   /* H1 hero — Vascomm Sans 700, ls -0.03em, lh 1.05 */
+--t-h2:       clamp(2rem, 4vw, 3rem);          /* judul section — Vascomm Sans 600, ls -0.02em, lh 1.15 */
+--t-h3:       clamp(1.375rem, 2vw, 1.75rem);   /* judul kartu — Vascomm Sans 600, ls -0.01em, lh 1.25 */
+--t-lead:     clamp(1.0625rem, 1.5vw, 1.25rem);/* paragraf hero — Vascomm Sans 400, lh 1.6 */
+--t-body:     1rem;                            /* Vascomm Sans 400, lh 1.7 */
+--t-sm:       0.875rem;                        /* Vascomm Sans 400, lh 1.6 */
 --t-eyebrow:  0.75rem;                         /* JetBrains Mono 500, ls 0.12em, UPPERCASE */
 ```
 

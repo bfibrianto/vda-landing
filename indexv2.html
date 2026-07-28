@@ -16,13 +16,16 @@
   <link rel="manifest" href="favicon/site.webmanifest">
 
   <link rel="preload" as="image" href="vda-mark.png" fetchpriority="high">
+
+  <!-- Font brand: Vascomm Sans, self-hosted. Hanya 4 bobot yang benar-benar
+       dipakai di halaman ini (Regular/Medium/Semibold/Bold), bukan seluruh keluarga. -->
+  <link rel="preload" as="font" type="font/woff2" href="vascomm-sans-v1.1/VascommSans-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="vascomm-sans-v1.1/VascommSans-Semibold.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="vascomm-sans-v1.1/VascommSans-Bold.woff2" crossorigin>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
   <!-- Ikon: Phosphor LIGHT weight. Garis ultra tipis, sesuai arah visual v2. -->
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" media="print"
@@ -32,6 +35,40 @@
   </noscript>
 
   <style>
+    /* ============================================================================
+   FONT BRAND: Vascomm Sans (self-hosted, vascomm-sans-v1.1/)
+   Hanya 4 bobot statis yang dipakai di halaman ini. Family tunggal
+   dipakai untuk display maupun body -- satu wajah, bukan pasangan.
+   ============================================================================ */
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Semibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Vascomm Sans';
+      src: url('vascomm-sans-v1.1/VascommSans-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     /* ============================================================================
    VDA v2  ·  Soft Structuralism + Z-Axis Cascade
    Turunan DESIGN-GUIDE.md. Perbedaan yang disengaja dari v1 dicatat inline.
@@ -69,8 +106,8 @@
       --grad-vda-deep: linear-gradient(135deg, #26386F 0%, #34509A 44%, #4368B2 100%);
 
       /* --- Tipografi --- */
-      --font-display: 'Clash Display', 'Plus Jakarta Sans', system-ui, sans-serif;
-      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-display: 'Vascomm Sans', system-ui, sans-serif;
+      --font-body: 'Vascomm Sans', system-ui, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
       /* Dibatasi 4.75rem supaya CTA hero tetap terlihat tanpa men-scroll */
